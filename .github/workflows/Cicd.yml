@@ -3,9 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches: [main]
-     paths-ignore:
-      - '**.md' 
-
+    
 jobs:
 #every job needs separate runner , it's called parallelism
   code:
