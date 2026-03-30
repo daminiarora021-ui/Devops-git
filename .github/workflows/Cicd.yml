@@ -1,10 +1,17 @@
 name: CI/CD Pipeline
 
 on:
-  push:
-    branches: [main]
-    paths-ignore: 
-      - '**.md' 
+  workflow_dispatch:
+    inputs:
+      environmnets:
+        description: 'Targeted Environment'
+        default: 'dev'
+        required: true
+        type: choice
+        options:
+          - dev
+          - prod
+          - staging
     
 jobs:
 #every job needs separate runner , it's called parallelism
