@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Damini Arora — DevOps Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #080c12;
+    --bg2: #0d1420;
+    --bg3: #111927;
+    --cyan: #00e5cc;
+    --cyan2: #00b5a0;
+    --gold: #f0c040;
+    --white: #f0f4ff;
+    --gray: #8899bb;
+    --border: rgba(0,229,204,0.15);
+    --glow: 0 0 30px rgba(0,229,204,0.15);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'Syne', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* ── Custom Cursor ── */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--cyan);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.2s, height 0.2s, background 0.2s;
+    mix-blend-mode: screen;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1.5px solid var(--cyan);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.15s ease, width 0.3s, height 0.3s, opacity 0.3s;
+    opacity: 0.5;
+  }
+  body:hover .cursor { opacity: 1; }
+
+  /* ── Grid Background ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,204,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,204,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ── Nav ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px 60px;
+    background: rgba(8,12,18,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 14px; color: var(--cyan);
+    letter-spacing: 2px;
+  }
+  .nav-logo span { color: var(--gray); }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px; color: var(--gray);
+    text-decoration: none; letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: color 0.2s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -4px; left: 0;
+    width: 0; height: 1px; background: var(--cyan);
+    transition: width 0.3s;
+  }
+  .nav-links a:hover { color: var(--cyan); }
+  .nav-links a:hover::after { width: 100%; }
+
+  /* ── Hero ── */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 120px 60px 80px;
+    position: relative; z-index: 1;
+  }
+  .hero-inner { max-width: 1100px; margin: 0 auto; width: 100%; }
+
+  .hero-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px; color: var(--cyan);
+    letter-spacing: 4px; text-transform: uppercase;
+    margin-bottom: 28px;
+    opacity: 0; animation: fadeUp 0.7s 0.2s forwards;
+  }
+  .hero-label::before { content: '> '; color: var(--gray); }
+
+  .hero-name {
+    font-size: clamp(56px, 9vw, 110px);
+    font-weight: 800; line-height: 0.9;
+    margin-bottom: 16px;
+    opacity: 0; animation: fadeUp 0.7s 0.4s forwards;
+  }
+  .hero-name .line2 { color: var(--cyan); display: block; }
+
+  .hero-title {
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(14px, 2vw, 18px);
+    color: var(--gray); margin-bottom: 32px;
+    opacity: 0; animation: fadeUp 0.7s 0.6s forwards;
+  }
+  .hero-title .highlight { color: var(--gold); }
+
+  .hero-desc {
+    max-width: 560px;
+    font-size: 16px; line-height: 1.7; color: #7a8faa;
+    margin-bottom: 48px;
+    opacity: 0; animation: fadeUp 0.7s 0.8s forwards;
+  }
+
+  .hero-ctas {
+    display: flex; gap: 20px; flex-wrap: wrap;
+    opacity: 0; animation: fadeUp 0.7s 1s forwards;
+  }
+  .btn-primary {
+    padding: 14px 32px;
+    background: var(--cyan); color: var(--bg);
+    font-family: 'Space Mono', monospace;
+    font-size: 13px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    text-decoration: none; border: none;
+    cursor: none; transition: all 0.2s;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+  }
+  .btn-primary:hover { background: var(--white); transform: translateY(-2px); }
+
+  .btn-ghost {
+    padding: 14px 32px;
+    background: transparent; color: var(--cyan);
+    font-family: 'Space Mono', monospace;
+    font-size: 13px; letter-spacing: 2px; text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid var(--cyan);
+    transition: all 0.2s; cursor: none;
+  }
+  .btn-ghost:hover { background: rgba(0,229,204,0.08); transform: translateY(-2px); }
+
+  /* Floating tech badges */
+  .hero-badges {
+    position: absolute; right: 60px; top: 50%;
+    transform: translateY(-50%);
+    display: flex; flex-direction: column; gap: 12px;
+    opacity: 0; animation: fadeIn 1s 1.2s forwards;
+  }
+  .badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; color: var(--cyan);
+    border: 1px solid var(--border);
+    background: rgba(0,229,204,0.04);
+    padding: 8px 16px; letter-spacing: 1.5px;
+    transition: all 0.3s;
+  }
+  .badge:hover { border-color: var(--cyan); background: rgba(0,229,204,0.1); }
+
+  /* EST Badge */
+  .est-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; color: var(--gold);
+    border: 1px solid rgba(240,192,64,0.3);
+    background: rgba(240,192,64,0.05);
+    padding: 8px 16px; letter-spacing: 1.5px;
+    display: inline-block; margin-top: 24px;
+  }
+
+  /* ── Section Base ── */
+  section { position: relative; z-index: 1; }
+  .section-inner { max-width: 1100px; margin: 0 auto; padding: 100px 60px; }
+
+  .section-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; color: var(--cyan);
+    letter-spacing: 4px; text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section-tag::before { content: '//'; color: var(--gray); }
+
+  .section-title {
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 800; line-height: 1;
+    margin-bottom: 60px;
+  }
+
+  /* ── Skills ── */
+  #skills { background: var(--bg2); }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2px;
+  }
+  .skill-card {
+    background: var(--bg3);
+    padding: 32px;
+    border: 1px solid var(--border);
+    transition: all 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .skill-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 3px; height: 0;
+    background: var(--cyan);
+    transition: height 0.4s;
+  }
+  .skill-card:hover { background: #141e2e; border-color: rgba(0,229,204,0.3); }
+  .skill-card:hover::before { height: 100%; }
+
+  .skill-icon {
+    font-size: 28px; margin-bottom: 16px;
+  }
+  .skill-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; color: var(--cyan);
+    letter-spacing: 3px; text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .skill-items {
+    font-size: 14px; color: var(--gray); line-height: 1.8;
+  }
+
+  /* ── Experience ── */
+  #experience { background: var(--bg); }
+
+  .exp-list { display: flex; flex-direction: column; gap: 0; }
+
+  .exp-item {
+    display: grid; grid-template-columns: 200px 1fr;
+    gap: 0; border-top: 1px solid var(--border);
+    padding: 48px 0;
+    transition: all 0.3s;
+  }
+  .exp-item:last-child { border-bottom: 1px solid var(--border); }
+
+  .exp-meta { padding-right: 40px; }
+  .exp-dates {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; color: var(--cyan);
+    letter-spacing: 1px; margin-bottom: 8px;
+  }
+  .exp-company {
+    font-size: 13px; color: var(--gray); line-height: 1.5;
+  }
+
+  .exp-content {}
+  .exp-role {
+    font-size: 24px; font-weight: 700;
+    margin-bottom: 16px; color: var(--white);
+  }
+  .exp-bullets { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .exp-bullets li {
+    font-size: 14px; color: var(--gray); line-height: 1.6;
+    padding-left: 20px; position: relative;
+  }
+  .exp-bullets li::before {
+    content: '▸'; position: absolute; left: 0; color: var(--cyan);
+    font-size: 10px; top: 3px;
+  }
+  .exp-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+  .exp-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px; padding: 4px 10px;
+    border: 1px solid var(--border);
+    color: var(--gray); letter-spacing: 1px;
+    background: rgba(0,229,204,0.03);
+  }
+
+  /* ── Projects ── */
+  #projects { background: var(--bg2); }
+
+  .projects-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .project-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 40px;
+    position: relative; overflow: hidden;
+    transition: all 0.3s;
+  }
+  .project-card:hover { border-color: rgba(0,229,204,0.4); transform: translateY(-4px); box-shadow: var(--glow); }
+
+  .project-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; color: var(--border);
+    letter-spacing: 2px; margin-bottom: 24px;
+  }
+  .project-name {
+    font-size: 22px; font-weight: 700;
+    margin-bottom: 12px; color: var(--white);
+  }
+  .project-co {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; color: var(--cyan);
+    letter-spacing: 2px; margin-bottom: 16px;
+  }
+  .project-desc { font-size: 14px; color: var(--gray); line-height: 1.7; }
+  .project-metric {
+    margin-top: 24px;
+    font-family: 'Space Mono', monospace;
+    font-size: 28px; font-weight: 700; color: var(--cyan);
+  }
+  .project-metric span { font-size: 12px; color: var(--gray); display: block; margin-top: 4px; }
+
+  /* ── Contact ── */
+  #contact { background: var(--bg); }
+
+  .contact-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px; align-items: center;
+  }
+  .contact-left .big-text {
+    font-size: clamp(40px, 6vw, 72px);
+    font-weight: 800; line-height: 1;
+    margin-bottom: 24px;
+  }
+  .contact-left .big-text .accent { color: var(--cyan); }
+  .contact-left p { font-size: 16px; color: var(--gray); line-height: 1.7; }
+
+  .contact-links { display: flex; flex-direction: column; gap: 0; }
+  .contact-link {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 24px 0; border-bottom: 1px solid var(--border);
+    text-decoration: none; color: var(--white);
+    transition: all 0.3s; cursor: none;
+  }
+  .contact-link:first-child { border-top: 1px solid var(--border); }
+  .contact-link:hover { padding-left: 12px; color: var(--cyan); }
+  .contact-link:hover .link-arrow { color: var(--cyan); transform: translateX(4px); }
+
+  .link-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; color: var(--gray); letter-spacing: 2px; margin-bottom: 4px;
+  }
+  .link-value { font-size: 16px; font-weight: 600; }
+  .link-arrow { font-size: 20px; color: var(--border); transition: all 0.3s; }
+
+  /* ── Footer ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 60px;
+    display: flex; justify-content: space-between; align-items: center;
+    position: relative; z-index: 1;
+  }
+  .footer-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; color: var(--gray); letter-spacing: 1px;
+  }
+  .footer-status {
+    display: flex; align-items: center; gap: 8px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; color: var(--cyan); letter-spacing: 1px;
+  }
+  .status-dot {
+    width: 8px; height: 8px; background: var(--cyan);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  /* ── Animations ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.8); }
+  }
+
+  /* scroll reveal */
+  .reveal {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .section-inner { padding: 60px 24px; }
+    #hero { padding: 100px 24px 60px; }
+    .hero-badges { display: none; }
+    .exp-item { grid-template-columns: 1fr; gap: 16px; }
+    .exp-meta { padding-right: 0; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+    footer { flex-direction: column; gap: 16px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-logo">DA<span>.</span>dev</div>
+  <ul class="nav-links">
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-inner">
+    <div class="hero-label">DevOps Engineer // EST Timezone</div>
+    <h1 class="hero-name">
+      Damini<br>
+      <span class="line2">Arora</span>
+    </h1>
+    <div class="hero-title">
+      Cloud Architecture &nbsp;·&nbsp; CI/CD Automation &nbsp;·&nbsp;
+      <span class="highlight">6+ Years</span>
+    </div>
+    <p class="hero-desc">
+      Building reliable, scalable infrastructure on AWS. Automating the full software lifecycle
+      with Terraform, Ansible, Kubernetes &amp; Python. Passionate about developer experience
+      and making teams ship faster with fewer failures.
+    </p>
+    <div class="hero-ctas">
+      <a href="#contact" class="btn-primary">Get In Touch</a>
+      <a href="#experience" class="btn-ghost">View Experience</a>
+    </div>
+    <div class="est-badge">📍 Brampton, ON &nbsp;|&nbsp; EST Timezone</div>
+  </div>
+
+  <div class="hero-badges">
+    <div class="badge">AWS Certified</div>
+    <div class="badge">Kubernetes</div>
+    <div class="badge">Terraform</div>
+    <div class="badge">Ansible</div>
+    <div class="badge">Python</div>
+    <div class="badge">Jenkins</div>
+    <div class="badge">Docker</div>
+    <div class="badge">OpenShift</div>
+  </div>
+</section>
+
+<!-- ── SKILLS ── -->
+<section id="skills">
+  <div class="section-inner">
+    <div class="section-tag reveal">Technical Stack</div>
+    <h2 class="section-title reveal">What I<br>Work With</h2>
+
+    <div class="skills-grid">
+      <div class="skill-card reveal reveal-delay-1">
+        <div class="skill-icon">☁️</div>
+        <div class="skill-label">Cloud Platforms</div>
+        <div class="skill-items">AWS (EC2, S3, RDS, IAM, CloudWatch, ECS, Lambda, API Gateway) · Microsoft Azure</div>
+      </div>
+      <div class="skill-card reveal reveal-delay-2">
+        <div class="skill-icon">⚙️</div>
+        <div class="skill-label">CI/CD Tools</div>
+        <div class="skill-items">Jenkins · GitHub Actions · GitLab CI · Azure DevOps · CircleCI · Codefresh</div>
+      </div>
+      <div class="skill-card reveal reveal-delay-3">
+        <div class="skill-icon">🐳</div>
+        <div class="skill-label">Containers & Orchestration</div>
+        <div class="skill-items">Docker · Kubernetes (EKS, AKS) · OpenShift · Helm</div>
+      </div>
+      <div class="skill-card reveal reveal-delay-4">
+        <div class="skill-icon">🏗️</div>
+        <div class="skill-label">IaC & Config Mgmt</div>
+        <div class="skill-items">Terraform · Ansible · AWS CloudFormation</div>
+      </div>
+      <div class="skill-card reveal reveal-delay-1">
+        <div class="skill-icon">🐍</div>
+        <div class="skill-label">Programming</div>
+        <div class="skill-items">Python · Bash · PowerShell · Java · Go</div>
+      </div>
+      <div class="skill-card reveal reveal-delay-2">
+        <div class="skill-icon">📊</div>
+        <div class="skill-label">Monitoring</div>
+        <div class="skill-items">Prometheus · Grafana · Datadog · ELK Stack · Splunk · CloudWatch</div>
+      </div>
+      <div class="skill-card reveal reveal-delay-3">
+        <div class="skill-icon">🗄️</div>
+        <div class="skill-label">Databases</div>
+        <div class="skill-items">MySQL · PostgreSQL · MongoDB</div>
+      </div>
+      <div class="skill-card reveal reveal-delay-4">
+        <div class="skill-icon">🤝</div>
+        <div class="skill-label">Agile & ITSM</div>
+        <div class="skill-items">Jira · Confluence · ServiceNow · Scrum</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── EXPERIENCE ── -->
+<section id="experience">
+  <div class="section-inner">
+    <div class="section-tag reveal">Career</div>
+    <h2 class="section-title reveal">Experience</h2>
+
+    <div class="exp-list">
+
+      <div class="exp-item reveal">
+        <div class="exp-meta">
+          <div class="exp-dates">Jan 2022 — Present</div>
+          <div class="exp-company">Ramji Digital Inc.<br>Canada (Remote)</div>
+        </div>
+        <div class="exp-content">
+          <div class="exp-role">Senior DevOps Engineer</div>
+          <ul class="exp-bullets">
+            <li>Architected CI/CD workflows using Jenkins, GitHub Actions &amp; CircleCI — reducing deployment time by <strong style="color:var(--cyan)">40%</strong>.</li>
+            <li>Managed cloud infrastructure on AWS with Terraform &amp; Ansible supporting 15+ environments (dev, staging, prod).</li>
+            <li>Deployed and scaled containerized microservices on Kubernetes (EKS) and OpenShift — maintaining <strong style="color:var(--cyan)">99.9% uptime</strong>.</li>
+            <li>Built monitoring pipelines using Prometheus, Grafana &amp; Datadog — reducing MTTR by <strong style="color:var(--cyan)">35%</strong>.</li>
+            <li>Automated backups, patching, and scaling via Python &amp; Bash, saving <strong style="color:var(--cyan)">10+ hours/week</strong> of manual effort.</li>
+            <li>Mentored junior engineers through code reviews and knowledge sessions, elevating team DevOps proficiency.</li>
+          </ul>
+          <div class="exp-tags">
+            <span class="exp-tag">AWS</span>
+            <span class="exp-tag">Kubernetes</span>
+            <span class="exp-tag">Terraform</span>
+            <span class="exp-tag">Jenkins</span>
+            <span class="exp-tag">Python</span>
+            <span class="exp-tag">Datadog</span>
+            <span class="exp-tag">OpenShift</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp-item reveal">
+        <div class="exp-meta">
+          <div class="exp-dates">Jun 2015 — Aug 2019</div>
+          <div class="exp-company">Accenture<br>India</div>
+        </div>
+        <div class="exp-content">
+          <div class="exp-role">DevOps / Systems Engineer</div>
+          <ul class="exp-bullets">
+            <li>Built Jenkins-based CI/CD pipelines for distributed Java &amp; Python applications with automated testing.</li>
+            <li>Authored Ansible playbooks automating configuration management across <strong style="color:var(--cyan)">100+ servers</strong>, eliminating config drift.</li>
+            <li>Designed and deployed AWS infrastructure (EC2, S3, RDS, CloudFront) for cloud migration projects.</li>
+            <li>Reduced monthly cloud spend by <strong style="color:var(--cyan)">28%</strong> through auto-scaling and right-sizing for Fortune 500 clients.</li>
+            <li>Managed MySQL &amp; PostgreSQL databases — replication, backups, and query optimization.</li>
+            <li>Documented SOPs and led knowledge transfer sessions as team mentor for onboarding engineers.</li>
+          </ul>
+          <div class="exp-tags">
+            <span class="exp-tag">Jenkins</span>
+            <span class="exp-tag">Ansible</span>
+            <span class="exp-tag">AWS</span>
+            <span class="exp-tag">Java</span>
+            <span class="exp-tag">MySQL</span>
+            <span class="exp-tag">ELK Stack</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── PROJECTS ── -->
+<section id="projects">
+  <div class="section-inner">
+    <div class="section-tag reveal">Work</div>
+    <h2 class="section-title reveal">Key Projects</h2>
+
+    <div class="projects-grid">
+      <div class="project-card reveal reveal-delay-1">
+        <div class="project-num">01 //</div>
+        <div class="project-name">Zero-Downtime Deployment Pipeline</div>
+        <div class="project-co">RAMJI DIGITAL INC.</div>
+        <div class="project-desc">
+          Architected a blue-green deployment pipeline on AWS ECS using GitHub Actions and Terraform. Implemented Lambda health checks and CloudWatch alarms for automatic rollback on failure.
+        </div>
+        <div class="project-metric">50,000+<span>users served with zero-downtime releases</span></div>
+      </div>
+
+      <div class="project-card reveal reveal-delay-2">
+        <div class="project-num">02 //</div>
+        <div class="project-name">Infrastructure Cost Optimization</div>
+        <div class="project-co">ACCENTURE</div>
+        <div class="project-desc">
+          Designed and implemented auto-scaling policies and right-sizing recommendations on AWS for a Fortune 500 client. Presented architectural proposals to senior stakeholders.
+        </div>
+        <div class="project-metric">28%<span>reduction in monthly cloud spend, zero SLA impact</span></div>
+      </div>
+
+      <div class="project-card reveal reveal-delay-3">
+        <div class="project-num">03 //</div>
+        <div class="project-name">Multi-Environment IaC Platform</div>
+        <div class="project-co">RAMJI DIGITAL INC.</div>
+        <div class="project-desc">
+          Built a unified Terraform + Ansible infrastructure codebase supporting 15+ environments across dev, staging, and production — fully parameterized and drift-resistant.
+        </div>
+        <div class="project-metric">15+<span>environments managed from a single codebase</span></div>
+      </div>
+
+      <div class="project-card reveal reveal-delay-4">
+        <div class="project-num">04 //</div>
+        <div class="project-name">CI Pipeline Acceleration</div>
+        <div class="project-co">RAMJI DIGITAL INC.</div>
+        <div class="project-desc">
+          Parallelized test stages, added Docker layer caching, and restructured integration tests — cutting CI feedback time from 45+ minutes to under 12 minutes.
+        </div>
+        <div class="project-metric">40%<span>faster deployment cycles across product teams</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section id="contact">
+  <div class="section-inner">
+    <div class="contact-grid">
+      <div class="contact-left reveal">
+        <div class="big-text">Let's<br><span class="accent">Connect</span></div>
+        <p>Open to Senior DevOps / Cloud Architecture roles. Based in EST — happy to collaborate with distributed teams across North America.</p>
+      </div>
+      <div class="contact-links reveal reveal-delay-2">
+        <a class="contact-link" href="mailto:daminiarora021@email.com">
+          <div>
+            <div class="link-label">EMAIL</div>
+            <div class="link-value">daminiarora021@email.com</div>
+          </div>
+          <span class="link-arrow">→</span>
+        </a>
+        <a class="contact-link" href="https://linkedin.com/in/aroradamini" target="_blank">
+          <div>
+            <div class="link-label">LINKEDIN</div>
+            <div class="link-value">linkedin.com/in/aroradamini</div>
+          </div>
+          <span class="link-arrow">→</span>
+        </a>
+        <a class="contact-link" href="tel:+17057701921">
+          <div>
+            <div class="link-label">PHONE</div>
+            <div class="link-value">+1 (705) 770-1921</div>
+          </div>
+          <span class="link-arrow">→</span>
+        </a>
+        <a class="contact-link" href="https://github.com/daminiarora021-ui" target="_blank">
+          <div>
+            <div class="link-label">GITHUB</div>
+            <div class="link-value">github.com/daminiarora021-ui</div>
+          </div>
+          <span class="link-arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-text">© 2025 Damini Arora &nbsp;·&nbsp; Brampton, ON, Canada</div>
+  <div class="footer-status">
+    <div class="status-dot"></div>
+    Available for new opportunities
+  </div>
+</footer>
+
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top = my + 'px';
+  });
+
+  function animateRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.width = '20px';
+      cursor.style.height = '20px';
+      ring.style.width = '56px';
+      ring.style.height = '56px';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.width = '12px';
+      cursor.style.height = '12px';
+      ring.style.width = '36px';
+      ring.style.height = '36px';
+    });
+  });
+
+  // Scroll Reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
